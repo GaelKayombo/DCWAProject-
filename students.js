@@ -40,5 +40,49 @@ router.get('/students', async (req, res) => {
   }
 });
 
+// add student form
+router.get('/students/add', (req, res) => {
+  res.type('html').send(`
+    <html>
+      <head><title>Add Student</title></head>
+      <body style="font-family: Arial; max-width: 760px; margin: 30px auto">
+        <h1>Add Student</h1>
+        <form method="POST" action="/students/add">
+          <p>
+            Name: <input type="text" name="name" required>
+          </p>
+          <p>
+            Age: <input type="number" name="age" required>
+          </p>
+          <button type="submit">Save</button>
+        </form>
+        <p><a href="/students">Back to list</a></p>
+      </body>
+    </html>
+  `);
+});
+
+
+// save new student
+router.post('/students/add', async (req, res) => {
+  const { name = '', age = '' } = req.body;
+  const ageNum = Number(age);
+
+  if (!name.trim() || Number.isNaN(ageNum)) {
+    return res.status(400).send('invalid data fam');
+  }
+
+  try {
+    await mysqlPool.query(
+      'INSERT INTO student (name, age) VALUES (?, ?)',
+      [name.trim(), ageNum]
+    );
+    res.redirect('/students');
+  } catch (err) {
+    console.error('add student err', err);
+    res.status(500).send('mysql insert fail');
+  }
+});
+
 
 module.exports = router;
