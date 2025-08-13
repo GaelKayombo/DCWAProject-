@@ -35,6 +35,11 @@ app.get('/lecturers-test', async (req, res) => {
 // port from env or default
 const PORT = process.env.PORT || 3000;
 
+// bring in student routes
+const studentRoutes = require('./students');
+app.use(studentRoutes);
+
+
 // home page route
 app.get('/', (req, res) => {
   res.send('Hello from my DCWA project (MySQL now connected)');
@@ -50,6 +55,11 @@ app.get('/test-mysql', async (req, res) => {
     res.status(500).send('MySQL connection error');
   }
 });
+
+// bring in grades
+const gradesRoutes = require('./grades');
+app.use(gradesRoutes);
+
 
 // start the server
 app.listen(PORT, () => {
