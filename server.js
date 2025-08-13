@@ -43,6 +43,9 @@ app.use(studentRoutes);
 const departmentsRoutes = require('./departments');
 app.use(departmentsRoutes);
 
+// bring in lecturers routes
+const lecturersRoutes = require('./lecturers');
+app.use(lecturersRoutes);
 
 
 // home page route
