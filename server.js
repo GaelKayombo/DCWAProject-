@@ -50,8 +50,22 @@ app.use(lecturersRoutes);
 
 // home page route
 app.get('/', (req, res) => {
-  res.send('Hello from my DCWA project (MySQL now connected)');
+  res.type('html').send(`
+    <html>
+      <head><title>Home</title></head>
+      <body style="font-family: Arial; max-width: 760px; margin: 30px auto">
+        <h1>DCWA Home</h1>
+        <ul>
+          <li><a href="/students">Students</a></li>
+          <li><a href="/grades">Grades</a></li>
+          <li><a href="/lecturers">Lecturers</a></li>
+          <li><a href="/departments">Departments</a></li>
+        </ul>
+      </body>
+    </html>
+  `);
 });
+
 
 // quick test route to see if MySQL works
 app.get('/test-mysql', async (req, res) => {
