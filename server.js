@@ -15,7 +15,7 @@ mongoose.connect(process.env.MONGO_URI)
   .catch(err => console.error('mongo db connection error', err));
 
   // quick lecturer test  just fetch a few so i know mongo is good
-const Lecturer = require('./models/lecturer');
+const Lecturer = require('./models/modelsLecturer');
 
 app.get('/lecturers-test', async (req, res) => {
   try {
@@ -38,6 +38,11 @@ const PORT = process.env.PORT || 3000;
 // bring in student routes
 const studentRoutes = require('./students');
 app.use(studentRoutes);
+
+// bring in department routes
+const departmentsRoutes = require('./departments');
+app.use(departmentsRoutes);
+
 
 
 // home page route
