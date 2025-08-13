@@ -52,22 +52,24 @@ app.use(lecturersRoutes);
 app.get('/', (req, res) => {
   res.type('html').send(`
     <html>
-      <head><title>Home</title></head>
-      <body style="font-family: Arial; max-width: 760px; margin: 30px auto">
-        <h1>DCWA Home — G00422049</h1>
-
-        <p>Welcome to my data centric web app. using express mysql and mongo. pass fail colours on grades added too.</p>
-
-        <ul>
-          <li><a href="/students">Students</a></li>
-          <li><a href="/grades">Grades</a></li>
-          <li><a href="/lecturers">Lecturers</a></li>
-          <li><a href="/departments">Departments</a></li>
-        </ul>
+      <head>
+        <title>DCWA Project</title>
+      </head>
+      <body style="font-family: Arial; margin: 0; padding: 0;">
+        <div style="background-color: #cce6ff; padding: 20px; text-align: center;">
+          <h1 style="margin: 0;">G00422049</h1>
+          <p style="margin: 5px 0;">Welcome to my Data Centric Web Applications Project</p>
+        </div>
+        <div style="max-width: 760px; margin: 30px auto; text-align: center;">
+          <p>This app shows my work with MySQL and MongoDB, plus some extra touches for the repeat.</p>
+          <a href="/students" style="display: inline-block; padding: 10px 20px; margin: 10px; background-color: #4da6ff; color: white; text-decoration: none; border-radius: 5px;">View Students</a>
+          <a href="/lecturers" style="display: inline-block; padding: 10px 20px; margin: 10px; background-color: #4da6ff; color: white; text-decoration: none; border-radius: 5px;">View Lecturers</a>
+        </div>
       </body>
     </html>
   `);
 });
+
 
 
 

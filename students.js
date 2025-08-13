@@ -42,26 +42,25 @@ router.get('/students', async (req, res) => {
 
 // add student form
 router.get('/students/add', (req, res) => {
-  res.type('html').send(`
-    <html>
-      <head><title>Add Student</title></head>
-      <body style="font-family: Arial; max-width: 760px; margin: 30px auto">
-        <h1>Add Student</h1>
-        <form method="POST" action="/students/add">
-          <p>
-            Name: <input type="text" name="name" required>
-          </p>
-          <p>
-            Age: <input type="number" name="age" required>
-          </p>
-          <button type="submit">Save</button>
-        </form>
-        <p><a href="/students">Back to list</a></p>
-      </body>
-    </html>
-  `);
-});
+res.type('html').send(`
+  <html>
+    <head>
+      <title>Students</title>
+    </head>
+    <body style="font-family: Arial; max-width: 760px; margin: 30px auto">
+      <div style="background-color: #0073e6; color: white; padding: 10px; text-align: center; font-size: 1.2em;">
+        DCWA Project — G00422049
+      </div>
 
+      <h1>Students</h1>
+      <ul>
+        ${rows.map(r => `<li><strong>${r.name}</strong> — ${r.sid}, age ${r.age}</li>`).join('')}
+      </ul>
+      <p><a href="/">Home</a></p>
+    </body>
+  </html>
+`);
+});
 
 // save new student
 router.post('/students/add', async (req, res) => {
