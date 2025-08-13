@@ -49,16 +49,24 @@ router.get('/grades', async (req, res) => {
       return `<li><strong>${s.name}</strong> — ${line}</li>`;
     }).join('');
 
-    res.type('html').send(`
-      <html>
-        <head><title>Grades</title></head>
-        <body style="font-family: Arial; max-width: 760px; margin: 30px auto">
-          <h1>Grades</h1>
-          <ul>${listHtml}</ul>
-          <p><a href="/">Home</a></p>
-        </body>
-      </html>
-    `);
+   res.type('html').send(`
+  <html>
+    <head><title>Grades</title></head>
+    <body style="font-family: Arial; margin:0; padding:0;">
+      <div style="background-color:#cce6ff; padding:16px; text-align:center;">
+        <h1 style="margin:0;">Grades</h1>
+      </div>
+
+      <div style="max-width:760px; margin:24px auto;">
+        <div style="margin-bottom:14px;">
+          <a href="/" style="display:inline-block; padding:10px 16px; background:#e9f3ff; color:#0b72b9; text-decoration:none; border:1px solid #b9dcff; border-radius:6px;">Home</a>
+        </div>
+
+        <ul>${listHtml}</ul>
+      </div>
+    </body>
+  </html>
+`);
   } catch (err) {
     console.error('grades page err', err);
     res.status(500).send('mysql read failed');
