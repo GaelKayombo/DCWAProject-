@@ -14,6 +14,24 @@ mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('mongo db connected'))
   .catch(err => console.error('mongo db connection error', err));
 
+  // quick lecturer test  just fetch a few so i know mongo is good
+const Lecturer = require('./models/lecturer');
+
+app.get('/lecturers-test', async (req, res) => {
+  try {
+    const list = await Lecturer.find().sort({ _id: 1 }).limit(5).lean();
+    // keeping output plain so i can see it fast
+    res.type('text').send(
+      list.length === 0
+        ? 'no lecturers in mongo'
+        : list.map(l => `${l._id} ${l.name}${l.did ? ' (' + l.did + ')' : ''}`).join('\n')
+    );
+  } catch (err) {
+    console.error('lecturers-test error', err);
+    res.status(500).send('mongo read failed');
+  }
+});
+
 // port from env or default
 const PORT = process.env.PORT || 3000;
 
