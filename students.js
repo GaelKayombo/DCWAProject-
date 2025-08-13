@@ -14,4 +14,31 @@ router.get('/students-test', async (req, res) => {
   }
 });
 
+// students page first pass  keep it simple html
+router.get('/students', async (req, res) => {
+  try {
+    const [rows] = await mysqlPool.query(
+      'SELECT sid, name, age FROM student ORDER BY sid ASC'
+    );
+
+    // super plain page so i can see it quick
+    res.type('html').send(`
+      <html>
+        <head><title>Students</title></head>
+        <body style="font-family: Arial; max-width: 760px; margin: 30px auto">
+          <h1>Students</h1>
+          <ul>
+            ${rows.map(r => `<li><strong>${r.name}</strong> — ${r.sid}, age ${r.age}</li>`).join('')}
+          </ul>
+          <p><a href="/">Home</a></p>
+        </body>
+      </html>
+    `);
+  } catch (err) {
+    console.error('students list err', err);
+    res.status(500).send('mysql read failed');
+  }
+});
+
+
 module.exports = router;
