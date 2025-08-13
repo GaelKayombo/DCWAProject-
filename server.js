@@ -1,54 +1,34 @@
-// starting point for the app (dotenv + MySQL connected)
+// starting point for the app (dotenv + mysql + mongo)
 const express = require('express');
 require('dotenv').config();
+const mongoose = require('mongoose');
 
 const app = express();
 
-// import mysql connection
-const mysqlPool = require('./mysqlConnection');
+// body parsing for forms
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
-// mongo db connection
-const mongoose = require('mongoose');
+// mysql connection (you put it under models/)
+const mysqlPool = require('./models/mysqlConnection');
 
+// mongo connect
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('mongo db connected'))
   .catch(err => console.error('mongo db connection error', err));
 
-  // quick lecturer test  just fetch a few so i know mongo is good
-const Lecturer = require('./models/modelsLecturer');
-
-app.get('/lecturers-test', async (req, res) => {
-  try {
-    const list = await Lecturer.find().sort({ _id: 1 }).limit(5).lean();
-    // keeping output plain so i can see it fast
-    res.type('text').send(
-      list.length === 0
-        ? 'no lecturers in mongo'
-        : list.map(l => `${l._id} ${l.name}${l.did ? ' (' + l.did + ')' : ''}`).join('\n')
-    );
-  } catch (err) {
-    console.error('lecturers-test error', err);
-    res.status(500).send('mongo read failed');
-  }
-});
-
-// port from env or default
-const PORT = process.env.PORT || 3000;
-
-// bring in student routes
-const studentRoutes = require('./students');
-app.use(studentRoutes);
-
-// bring in department routes
+// routes
+const studentRoutes     = require('./students');
 const departmentsRoutes = require('./departments');
+const lecturersRoutes   = require('./lecturers');
+const gradesRoutes      = require('./grades');
+
+app.use(studentRoutes);
 app.use(departmentsRoutes);
-
-// bring in lecturers routes
-const lecturersRoutes = require('./lecturers');
 app.use(lecturersRoutes);
+app.use(gradesRoutes);
 
-
-// home page route
+// home page  banner + 4 buttons
 app.get('/', (req, res) => {
   res.type('html').send(`
     <html>
@@ -61,19 +41,18 @@ app.get('/', (req, res) => {
           <p style="margin: 5px 0;">Welcome to my Data Centric Web Applications Project</p>
         </div>
         <div style="max-width: 760px; margin: 30px auto; text-align: center;">
-          <p>This app shows my work with MySQL and MongoDB, plus some extra touches for the repeat.</p>
-          <a href="/students" style="display: inline-block; padding: 10px 20px; margin: 10px; background-color: #4da6ff; color: white; text-decoration: none; border-radius: 5px;">View Students</a>
-          <a href="/lecturers" style="display: inline-block; padding: 10px 20px; margin: 10px; background-color: #4da6ff; color: white; text-decoration: none; border-radius: 5px;">View Lecturers</a>
+          <p>this app shows mysql + mongo together and small pass fail thing on grades. keeping it simple so i can demo it fast</p>
+          <a href="/students"     style="display:inline-block; padding:10px 20px; margin:10px; background:#4da6ff; color:#fff; text-decoration:none; border-radius:5px;">View Students</a>
+          <a href="/grades"       style="display:inline-block; padding:10px 20px; margin:10px; background:#4da6ff; color:#fff; text-decoration:none; border-radius:5px;">View Grades</a>
+          <a href="/lecturers"    style="display:inline-block; padding:10px 20px; margin:10px; background:#4da6ff; color:#fff; text-decoration:none; border-radius:5px;">View Lecturers</a>
+          <a href="/departments"  style="display:inline-block; padding:10px 20px; margin:10px; background:#4da6ff; color:#fff; text-decoration:none; border-radius:5px;">View Departments</a>
         </div>
       </body>
     </html>
   `);
 });
 
-
-
-
-// quick test route to see if MySQL works
+// quick test mysql (optional keep)
 app.get('/test-mysql', async (req, res) => {
   try {
     const [rows] = await mysqlPool.query('SELECT 1 + 1 AS result');
@@ -84,12 +63,8 @@ app.get('/test-mysql', async (req, res) => {
   }
 });
 
-// bring in grades
-const gradesRoutes = require('./grades');
-app.use(gradesRoutes);
-
-
-// start the server
+// port + start
+const PORT = process.env.PORT || 3004;
 app.listen(PORT, () => {
   console.log(`server running on http://localhost:${PORT}`);
 });
