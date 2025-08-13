@@ -54,7 +54,10 @@ app.get('/', (req, res) => {
     <html>
       <head><title>Home</title></head>
       <body style="font-family: Arial; max-width: 760px; margin: 30px auto">
-        <h1>DCWA Home</h1>
+        <h1>DCWA Home — G00422049</h1>
+
+        <p>Welcome to my data centric web app. using express mysql and mongo. pass fail colours on grades added too.</p>
+
         <ul>
           <li><a href="/students">Students</a></li>
           <li><a href="/grades">Grades</a></li>
@@ -65,6 +68,7 @@ app.get('/', (req, res) => {
     </html>
   `);
 });
+
 
 
 // quick test route to see if MySQL works
